@@ -5,7 +5,7 @@ phases:
   build:
     commands:
       - echo Stopping existing backend
-      - aws ec2 update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --desired-count 0
+      - aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${AUTO_SCALING_GROUP_NAME} --desired-capacity 0
       - echo Terminating existing EC2 instances
       - INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=${INSTANCE_TAG}" --query "Reservations[*].Instances[*].InstanceId" --output text)
       - aws ec2 terminate-instances --instance-ids $INSTANCE_IDS
@@ -14,4 +14,4 @@ phases:
       - echo Launching new EC2 instances
       - aws ec2 run-instances --image-id ${IMAGE_ID} --count ${INSTANCE_COUNT} --instance-type ${INSTANCE_TYPE} --key-name ${KEY_NAME} --security-group-ids ${SECURITY_GROUP_ID} --subnet-id ${SUBNET_ID} --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${INSTANCE_TAG}}]"
       - echo Deploying new backend
-      - aws ec2 update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --desired-count 1
+      - aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${AUTO_SCALING_GROUP_NAME} --desired-capacity 0
