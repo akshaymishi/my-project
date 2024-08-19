@@ -14,4 +14,4 @@ phases:
       - echo Launching new EC2 instances
       - aws ec2 run-instances --image-id ${IMAGE_ID} --count ${INSTANCE_COUNT} --instance-type ${INSTANCE_TYPE} --key-name ${KEY_NAME} --security-group-ids ${SECURITY_GROUP_ID} --subnet-id ${SUBNET_ID} --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${INSTANCE_TAG}}]"
       - echo Deploying new backend
-      - aws ecs update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --desired-count 1
+      - aws ec2 update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --desired-count 1
